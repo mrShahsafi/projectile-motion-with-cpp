@@ -1,0 +1,111 @@
+#include <iostream>
+#include <GLUT/GLUT.h>
+#include <OpenGL/OpenGL.h>
+
+
+using namespace std;
+
+static float t = 0.0f;
+float Vx=0.0f,Vy=0.0f ;
+float x=0.0f,y=0.0f ;
+float xend = 0.0f  , yend=0.0f;
+static float g = .8f;
+bool timerun = true;
+void keyboard (unsigned char key , int x , int y);
+
+void newdis();
+void maneh();
+void display(){
+    
+   glClearColor( .0, .0, .0, .0 );
+    
+    glLoadIdentity();
+    gluOrtho2D( 0, 147, 0, 150 );
+    
+    glColor3f(.2f,1.0f,1.0f);
+    
+    glEnable(GL_POINT_SMOOTH);
+
+    glPointSize(30);
+    
+    glBegin(GL_POINTS);
+    x = Vx*t ;
+    y = Vy*t - (g/4.0f)*t*t ;
+    
+    if ( y>=-13 || x<=122 ) {
+        timerun=true;}
+    
+    else{
+        
+        newdis();
+        
+    }
+  
+    glVertex2f(x,y);
+    maneh();
+    glFlush();
+    glEnd();
+    glutSwapBuffers();
+    glutKeyboardFunc(keyboard);
+   
+}
+
+
+void timer( int value){
+    if (timerun==true){
+        t += 1;
+      glutTimerFunc(80,timer,60);
+        glutPostRedisplay();}
+                        }
+
+void keyboard (unsigned char key , int x , int y){
+    if (key == 27){
+        exit(0);}
+    if (key == 'f') {
+        glutFullScreen();}
+}
+
+void maneh(){
+    
+    if (xend == x && yend == y) {
+        cout<<":) BOOOM :) "<<endl;}
+    
+
+    else{
+        cout<<" irrelevant ! "<<endl;}
+}
+
+void newdis(){
+    
+    glClearColor(.0,0.0,.0,.0);
+    glClear( GL_COLOR_BUFFER_BIT );
+    
+    glEnd();
+    }
+
+int main( int argc, char **argv ){
+
+    cout<<"Enter Vx : ";
+    cin>>Vx;
+    cout<<"Enter Vy : ";
+    cin>>Vy;
+    
+    cout<<"Enter final point(x) : ";
+    cin>>xend;
+    cout<<"Enter final point(y) : ";
+    cin>>yend;
+    cout<<endl;
+  
+    
+    glutInit( &argc, argv );
+ 
+    glutInitDisplayMode( GLUT_RGBA | GLUT_SINGLE );
+    glutInitWindowSize(720,480);
+    glutInitWindowPosition(350,200);
+    glutCreateWindow( "Move" );
+    glutDisplayFunc( display );
+    glutTimerFunc(400,timer,100);
+
+    maneh();
+    glutMainLoop();
+    return 0;} 
